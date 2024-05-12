@@ -13,7 +13,7 @@ const {
 const {
   newComment,
   getComments,
-  deleteComment
+  deleteComment,
 } = require("../controller/commentController.js");
 
 const router = express.Router();
@@ -32,6 +32,6 @@ router.delete("/delete/:id", authenticateToken, deletePost);
 
 router.post("/comment/new", authenticateToken, newComment);
 router.get("/comments/:id", authenticateToken, getComments);
-router.delete('/comment/delete/:id',authenticateToken,deleteComment);
+router.delete("/comment/delete/:id", authenticateToken, deleteComment);
 
 module.exports = router;

@@ -73,7 +73,7 @@ const Login = ({ isUserAuthenticated }) => {
     try {
       const config = {
         headers: {
-          "Content-type": "application/json",
+          "Content-Type": "application/json",
         },
       };
       // console.log(login.username, login.password);
@@ -118,7 +118,7 @@ const Login = ({ isUserAuthenticated }) => {
     try {
       const config = {
         headers: {
-          "Content-type": "application/json",
+          "Content-Type": "application/json",
         },
       };
       const name = signup.name;
@@ -133,7 +133,8 @@ const Login = ({ isUserAuthenticated }) => {
         },
         config
       );
-      if (data.status !== 200) {
+      // console.log(data);
+      if (!data) {
         setError("Could not sign up!");
         return;
       }

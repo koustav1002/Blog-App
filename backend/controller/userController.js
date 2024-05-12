@@ -10,9 +10,9 @@ const signupUser = async (req, res) => {
     const name = req.body.name;
     const username = req.body.username;
 
-    if (await User.findOne({ username })) {
-      res.status(400);
-      throw new Error("Username already exists! Try something else.");
+    if (await User.findOne({ username: username })) {
+      res.status(400).json({ msg: "Username already exists!" });
+      // throw new Error("Username already exists! Try something else.");
     }
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(req.body.password, salt);
@@ -30,7 +30,7 @@ const signupUser = async (req, res) => {
     });
   } catch (error) {
     // console.log("Failed to login")
-    res.status(500).json({ msg: "Failed to sign up!" });
+    res.status(500);
   }
 };
 
@@ -39,7 +39,7 @@ const loginUser = async (req, res) => {
   const user = await User.findOne({ username });
   if (!user) {
     res.status(400);
-    throw new Error("Incorrect username! Please try again.");
+    // throw new Error("Incorrect username! Please try again.");
   }
 
   try {
@@ -70,11 +70,11 @@ const loginUser = async (req, res) => {
       });
     } else {
       res.status(400).json({ msg: "Password doesn't match!" });
-      throw new Error("Password not does not match!");
+      // throw new Error("Password not does not match!");
     }
   } catch (error) {
     res.status(500).json({ msg: "Some error occured" });
-    throw new Error("Some error occured! Please try again.");
+    // throw new Error("Some error occured! Please try again.");
   }
 };
 
