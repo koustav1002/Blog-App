@@ -18,10 +18,10 @@ const Banner = () => {
       <Typography
         sx={{
           fontSize: "20px",
-          background: "#FFFFFF",
+          color: "#FFFFFF",
         }}
       >
-        Code for Interview
+        Share your story. Find your voice.
       </Typography>
     </Image>
   );

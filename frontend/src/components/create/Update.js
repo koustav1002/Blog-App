@@ -9,7 +9,7 @@ import {
 import { AddCircle as Add } from "@mui/icons-material";
 import { useState, useEffect, useContext } from "react";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { DataContext } from "../../context/DataProvider";
 
@@ -18,10 +18,10 @@ import { getAccessToken } from "../../utils/commonUtils";
 import axios from "axios";
 
 const Container = styled(Box)(({ theme }) => ({
-  margin: "50px 100px",
-  [theme.breakpoints.down("md")]: {
-    margin: 0,
-  },
+    margin: '50px 100px',
+    [theme.breakpoints.down('md')]: {
+        margin: 0
+    }
 }));
 
 const Image = styled("img")`
@@ -61,7 +61,7 @@ const initialPost = {
   createdAt: new Date(),
 };
 
-const CreatePost = () => {
+const Update = () => {
   const [post, setPost] = useState(initialPost);
   const [file, setFile] = useState("");
 
@@ -73,6 +73,31 @@ const CreatePost = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        id: id,
+      };
+      const config = {
+        headers: {
+          Authorization: `${getAccessToken()}`,
+        },
+        params,
+      };
+      try {
+        const response = await axios.get(`/post/${id}`, config); // API call
+        // console.log(response);
+        if (response.data) {
+          setPost(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching post:", error); // Handle errors
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const getImage = async () => {
@@ -107,21 +132,25 @@ const CreatePost = () => {
     setPost({ ...post, [e.target.name]: e.target.value });
   };
 
-  const savePost = async () => {
+  const updateBlogPost = async () => {
     //API call to save post
     // let response = "";
+    const params = {
+        id:id,
+    };
     const config = {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${getAccessToken()}`,
       },
+      params,
     };
-    console.log(post);
-    const response = await axios.post("/create", post, config);
+    // console.log(post);
+    const response = await axios.put(`/update/${id}`, post, config);
     console.log(response);
 
     if (response) {
-      navigate("/");
+      navigate(`/details/${id}`);
     } else {
       console.log("Some error occured!");
     }
@@ -143,10 +172,11 @@ const CreatePost = () => {
         <InputTextField
           placeholder="Title"
           name="title"
+          value={post.title}
           onChange={(e) => handleChange(e)}
         />
-        <Button variant="contained" onClick={() => savePost()}>
-          Publish
+        <Button variant="contained" onClick={() => updateBlogPost()}>
+          Update
         </Button>
       </StyledFormControl>
       <Textarea
@@ -154,9 +184,10 @@ const CreatePost = () => {
         placeholder="Tell your story...."
         name="description"
         onChange={(e) => handleChange(e)}
+        value={post.description}
       ></Textarea>
     </Container>
   );
 };
 
-export default CreatePost;
+export default Update;

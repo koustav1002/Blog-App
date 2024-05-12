@@ -9,7 +9,7 @@ const Component = styled(Box)`
   width: 400px;
   margin: auto;
   box-shadow: 5px 2px 5px 2px rgb(0 0 0/ 0.76);
-  border-radius: 9px;
+  border-radius: 7px;
   margin-top: 64px;
 `;
 
@@ -124,7 +124,7 @@ const Login = ({ isUserAuthenticated }) => {
       const name = signup.name;
       const username = signup.username;
       const password = signup.password;
-      const { data } = await axios.post(
+      const data = await axios.post(
         "/signup",
         {
           name,
@@ -133,6 +133,10 @@ const Login = ({ isUserAuthenticated }) => {
         },
         config
       );
+      if (data.status !== 200) {
+        setError("Could not sign up!");
+        return;
+      }
       // console.log(data);
       setError("");
       setSignup(signupInitialValues);
@@ -150,7 +154,7 @@ const Login = ({ isUserAuthenticated }) => {
           <Wrapper>
             <TextField
               label="Enter username"
-              variant="outlined"
+              variant="standard"
               value={login.username}
               onChange={(e) => onValueChange(e)}
               name="username"
@@ -160,7 +164,7 @@ const Login = ({ isUserAuthenticated }) => {
             />
             <TextField
               label="Enter password"
-              variant="outlined"
+              variant="standard"
               value={login.password}
               onChange={(e) => onValueChange(e)}
               name="password"
