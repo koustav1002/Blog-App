@@ -78,24 +78,10 @@ const CreatePost = () => {
     const getImage = async () => {
       if (file) {
         const data = new FormData();
-        // data.append("name", file.name); // Optional, include the filename
+        
         data.append("file", file);
         data.append("upload_preset", `${process.env.REACT_APP_UPLOAD_PRESET}`);
 
-        // API Call (corrected Content-Type)
-        // CLOUDINARY_URL=https://api.cloudinary.com/v1_1/dxm3kw8qr/image/upload
-        // const config = {
-        //   headers: {
-        //     "Content-Type": "multipart/form-data", // Set to multipart/form-data for file uploads
-        //   },
-        // };
-
-        // const response = await axios.post("/file/upload", data, config);
-
-        // Handle response (optional)
-        // console.log(response.data); // Access the server's response
-
-        // post.picture = response.data; //TODO
         const response = await axios.post(
           `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDNAME}/image/upload`,
           data

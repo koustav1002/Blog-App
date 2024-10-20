@@ -18,10 +18,10 @@ import { getAccessToken } from "../../utils/commonUtils";
 import axios from "axios";
 
 const Container = styled(Box)(({ theme }) => ({
-    margin: '50px 100px',
-    [theme.breakpoints.down('md')]: {
-        margin: 0
-    }
+  margin: "50px 100px",
+  [theme.breakpoints.down("md")]: {
+    margin: 0,
+  },
 }));
 
 const Image = styled("img")`
@@ -103,22 +103,16 @@ const Update = () => {
     const getImage = async () => {
       if (file) {
         const data = new FormData();
-        data.append("name", file.name); // Optional, include the filename
         data.append("file", file);
+        data.append("upload_preset", `${process.env.REACT_APP_UPLOAD_PRESET}`);
 
         // API Call (corrected Content-Type)
-        const config = {
-          headers: {
-            "Content-Type": "multipart/form-data", // Set to multipart/form-data for file uploads
-          },
-        };
+        const response = await axios.post(
+          `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDNAME}/image/upload`,
+          data
+        );
 
-        const response = await axios.post("/file/upload", data, config);
-
-        // Handle response (optional)
-        console.log(response.data); // Access the server's response
-
-        post.picture = response.data; //TODO
+        post.picture = response.data["secure_url"];
       }
     };
     getImage();
@@ -136,7 +130,7 @@ const Update = () => {
     //API call to save post
     // let response = "";
     const params = {
-        id:id,
+      id: id,
     };
     const config = {
       headers: {
